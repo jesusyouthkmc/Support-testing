@@ -15,6 +15,7 @@
       justify-content: center;
       background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 50%, #F25E2C 100%);
       padding: 20px;
+      margin: 0;
     }
     
     .bg-logo {
@@ -67,16 +68,22 @@
       transition: width 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
       pointer-events: none;
     }
-    .prayer-btn.loading .loading-bar-fill { width: 100% !important; transition: width 2s linear; }
-    .prayer-btn.loading .btn-text { opacity: 0; transition: opacity 0.15s ease; }
+    .prayer-btn.loading .loading-bar-fill { 
+      width: 100% !important; 
+      transition: width 14s linear;
+    }
+    .prayer-btn.loading .btn-text { 
+      opacity: 0 !important; 
+      transition: opacity 0.15s ease; 
+    }
     .prayer-btn.loading { cursor: wait; }
     
     @keyframes loadingGlow {
-      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
-      50% { box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.5); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3); }
+      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2); }
+      50% { box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.4); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2); }
     }
-    .prayer-btn.loading { animation: loadingGlow 1s infinite; }
+    .prayer-btn.loading { animation: loadingGlow 1.2s infinite; }
     
     .counter-wrapper {
       display: inline-block;
@@ -85,15 +92,38 @@
       -webkit-background-clip: text;
       color: transparent;
       font-weight: bold;
+      transition: all 0.3s ease;
     }
     
     @keyframes counterGlow {
-      0% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); transform: scale(1); }
-      50% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8); transform: scale(1.05); }
-      100% { text-shadow: 0 0 0px rgba(255, 255, 255, 0); transform: scale(1); }
+      0% { 
+        text-shadow: 0 0 0px rgba(255, 255, 255, 0); 
+        transform: scale(1); 
+      }
+      25% { 
+        text-shadow: 
+          0 0 20px rgba(255, 255, 255, 0.6),
+          0 0 40px rgba(255, 255, 255, 0.3); 
+        transform: scale(1.15); 
+      }
+      50% { 
+        text-shadow: 
+          0 0 15px rgba(255, 255, 255, 0.4),
+          0 0 30px rgba(255, 255, 255, 0.2); 
+        transform: scale(0.95); 
+      }
+      75% {
+        text-shadow: 
+          0 0 10px rgba(255, 255, 255, 0.3);
+        transform: scale(1.03);
+      }
+      100% { 
+        text-shadow: 0 0 0px rgba(255, 255, 255, 0); 
+        transform: scale(1); 
+      }
     }
     .counter-glow {
-      animation: counterGlow 0.5s ease-out;
+      animation: counterGlow 0.8s ease-out;
     }
     
     .fade-up {
@@ -105,6 +135,142 @@
       opacity: 1;
       transform: translateY(0);
     }
+
+    /* ===== PRAYER LINES STYLES ===== */
+    .prayer-lines-container {
+      min-height: 80px;
+      max-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 8px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Horizontal Vine PNG */
+    .vine-decoration {
+      position: absolute;
+      opacity: 0.3;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      pointer-events: none;
+      width: 80%;
+      max-width: 400px;
+      height: auto;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      object-fit: contain;
+    }
+    .vine-decoration.hidden {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.9);
+    }
+
+    /* Gentle sway for horizontal vine */
+    @keyframes vineSway {
+      0%, 100% { transform: translate(-50%, -50%) rotate(-1deg); }
+      50% { transform: translate(-50%, -50%) rotate(1deg); }
+    }
+    .vine-decoration:not(.hidden) {
+      animation: vineSway 4s ease-in-out infinite;
+    }
+
+    .prayer-line {
+      position: absolute;
+      font-size: 1.4rem;
+      line-height: 1.6;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      font-weight: 600;
+      padding: 0 10px;
+      width: 100%;
+      background: linear-gradient(135deg, #ffffff 0%, #FFD700 50%, #FFA500 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 30px rgba(255, 215, 0, 0.15);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    .prayer-line.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .prayer-line.fading {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+    }
+
+    .prayer-line.amen {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 30px rgba(255, 215, 0, 0.15);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    }
+
+    /* Small screens */
+    @media (max-width: 640px) {
+      .prayer-line {
+        font-size: 1.1rem;
+      }
+      .prayer-line.amen {
+        font-size: 1.6rem;
+      }
+      .prayer-lines-container {
+        min-height: 60px;
+        max-height: 60px;
+      }
+      .vine-decoration {
+        width: 70%;
+        max-width: 250px;
+      }
+    }
+
+    .prayer-lines-container::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      height: 120%;
+      background: radial-gradient(ellipse at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .celebration {
+      animation: celebrate 0.8s ease;
+    }
+    @keyframes celebrate {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.3); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+
+    .prayer-card {
+      transition: all 0.3s ease;
+    }
+
+    .counter-section {
+      margin-bottom: 4px !important;
+      padding: 20px 8px !important;
+    }
+    .button-container {
+      margin-top: 4px !important;
+    }
+    .prayer-text {
+      margin-bottom: 4px !important;
+    }
   </style>
 </head>
 <body>
@@ -114,26 +280,33 @@
   <div class="content-wrapper">
     <section id="support" class="py-20 md:py-28">
       <div class="max-w-3xl mx-auto px-5 md:px-8">
-        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-lg fade-up visible border border-white/30 text-center">
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-lg fade-up visible border border-white/30 text-center prayer-card">
           <div class="text-5xl mb-4">💝</div>
           <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Support Us</h2>
-          <p class="text-amber-100 text-lg mb-8">Your prayers are the foundation of our ministry. Every Hail Mary lifts us up!</p>
+          <p class="text-amber-100 text-lg mb-6 prayer-text">Your prayers are the foundation of our ministry. Every Hail Mary lifts us up!</p>
           
-          <div class="bg-white/5 rounded-2xl p-8 mb-8">
-            <div class="text-6xl font-bold mb-2">
+          <div class="bg-white/5 rounded-2xl p-6 counter-section mb-2">
+            <div class="text-6xl font-bold mb-1">
               <span id="prayerCountDisplay" class="counter-wrapper">0</span>
             </div>
-            <p class="text-white/80 text-lg">Hail Mary's received from all supporters</p>
+            <p class="text-white/80 text-base">Hail Mary's received from all supporters</p>
+          </div>
+
+          <!-- Prayer Lines Container with Horizontal Vine -->
+          <div class="prayer-lines-container" id="prayerLinesContainer">
+            <!-- Single horizontal vine PNG - Replace with your filename -->
+            <img src="vine-horizontal.png" alt="Vine" class="vine-decoration" id="vineDecoration">
+            <!-- Prayer lines will be dynamically inserted here -->
           </div>
           
-          <div class="prayer-button-container">
+          <div class="prayer-button-container mt-3 button-container">
             <button id="prayerButton" class="prayer-btn">
               <div id="loadingBarFill" class="loading-bar-fill"></div>
-              <span class="btn-text">🙏 Pray a Hail Mary</span>
+              <span id="btnText" class="btn-text">🙏 Pray a Hail Mary</span>
             </button>
           </div>
           
-          <p class="text-white/60 text-sm mt-6">"The fervent prayer of a righteous person is very powerful." — James 5:16</p>
+          <p class="text-white/60 text-sm mt-5">"The fervent prayer of a righteous person is very powerful." — James 5:16</p>
         </div>
       </div>
     </section>
@@ -142,32 +315,116 @@
   <audio id="prayerSound" preload="auto" style="display: none;"></audio>
 
   <script>
-    // ============ PRAYER COUNTER ============
+    // ============ PRAYER LINES DATA ============
+    const PRAYER_LINES = [
+      "Hail Mary, full of grace",
+      "The Lord is with you",
+      "Blessed are you among women",
+      "and blessed is the fruit of your womb, Jesus",
+      "Holy Mary, Mother of God",
+      "pray for us sinners",
+      "now and at the hour of our death",
+      "Amen 🙏"
+    ];
+
+    // ============ API CONFIG ============
     const API = 'https://script.google.com/macros/s/AKfycbwNdwXUGx00p_KbCIZ54-q--bjdphMtluDq6k9_3ym-XlQhPF0EN7K0uj-y20JvP9rggg/exec';
+
+    // ============ DOM ELEMENTS ============
     const display = document.getElementById('prayerCountDisplay');
     const btn = document.getElementById('prayerButton');
+    const btnText = document.getElementById('btnText');
     const fill = document.getElementById('loadingBarFill');
     const audio = document.getElementById('prayerSound');
-    
-    if (audio) {
-      audio.volume = 0.7;
-      audio.preload = 'auto';
-      audio.src = 'prayer-sound.mp3';
-      audio.load();
+    const container = document.getElementById('prayerLinesContainer');
+    const vine = document.getElementById('vineDecoration');
+
+    // ============ PRAYER LINE RENDERER ============
+    let currentLineIndex = -1;
+    let isPraying = false;
+    let prayerInterval = null;
+
+    function renderPrayerLines() {
+      const existingLines = container.querySelectorAll('.prayer-line');
+      existingLines.forEach(line => line.remove());
+      
+      PRAYER_LINES.forEach((text, index) => {
+        const div = document.createElement('div');
+        div.className = 'prayer-line';
+        if (index === PRAYER_LINES.length - 1) {
+          div.classList.add('amen');
+        }
+        div.textContent = text;
+        div.dataset.index = index;
+        container.appendChild(div);
+      });
     }
 
+    function showVine(show) {
+      if (show) {
+        vine.classList.remove('hidden');
+      } else {
+        vine.classList.add('hidden');
+      }
+    }
+
+    function showPrayerLine(index) {
+      const lines = container.querySelectorAll('.prayer-line');
+
+      lines.forEach(line => {
+        line.classList.remove('visible', 'fading');
+      });
+
+      if (index >= 0 && index < lines.length) {
+        lines[index].classList.add('visible');
+        showVine(false);
+      } else {
+        showVine(true);
+      }
+    }
+
+    function animatePrayer() {
+      return new Promise((resolve) => {
+        if (isPraying) return resolve();
+        isPraying = true;
+        currentLineIndex = 0;
+        showPrayerLine(0);
+
+        prayerInterval = setInterval(() => {
+          currentLineIndex++;
+          
+          if (currentLineIndex < PRAYER_LINES.length) {
+            showPrayerLine(currentLineIndex);
+            
+            if (currentLineIndex === PRAYER_LINES.length - 1) {
+              fill.style.width = '100%';
+            }
+          } else {
+            clearInterval(prayerInterval);
+            prayerInterval = null;
+            isPraying = false;
+            resolve();
+          }
+        }, 2000);
+      });
+    }
+
+    // ============ PRAYER COUNTER LOGIC ============
     let processing = false;
     let audioUnlocked = false;
 
     function updateDisplayDirect(val) {
       if (display) {
-        display.classList.remove('counter-glow');
+        display.classList.remove('counter-glow', 'celebration');
         void display.offsetWidth;
         display.innerHTML = `<span class="counter-wrapper">${val.toLocaleString()}</span>`;
-        display.classList.add('counter-glow');
+        const wrapper = display.querySelector('.counter-wrapper');
+        wrapper.classList.add('counter-glow');
+        display.classList.add('celebration');
         setTimeout(() => {
-          display.classList.remove('counter-glow');
-        }, 500);
+          wrapper.classList.remove('counter-glow');
+          display.classList.remove('celebration');
+        }, 900);
       }
     }
 
@@ -181,14 +438,36 @@
       }
     }
 
+    function showThankYou() {
+      btn.classList.remove('loading');
+      fill.style.width = '0%';
+      btnText.style.opacity = '1';
+      btnText.style.color = 'white';
+      btnText.textContent = 'Thank You ☺️';
+      btn.style.backgroundColor = '#4CAF50';
+      btn.style.color = 'white';
+    }
+
+    function resetButton() {
+      btnText.textContent = '🙏 Pray a Hail Mary';
+      btnText.style.opacity = '';
+      btnText.style.color = '';
+      btn.style.backgroundColor = '';
+      btn.style.color = '';
+      btn.disabled = false;
+      
+      currentLineIndex = -1;
+      showPrayerLine(-1);
+    }
+
     async function increment() {
       if (processing) return;
       
       processing = true;
+      
       btn.classList.add('loading');
       btn.disabled = true;
       fill.style.width = '100%';
-      let originalText = btn.querySelector('.btn-text').innerHTML;
       
       if (audio && !audioUnlocked) {
         audio.src = 'silent.mp3';
@@ -198,44 +477,50 @@
         audio.src = 'prayer-sound.mp3';
         audio.load();
       }
-      
+
+      await animatePrayer();
+
       try {
         await fetch(API, { method: 'POST' });
         await new Promise(r => setTimeout(r, 300));
         let res = await fetch(API);
         let data = await res.json();
         
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        fill.style.width = '0%';
         updateDisplayDirect(data.count);
+        showThankYou();
         
         if (audio) {
           audio.currentTime = 0;
           audio.play().catch(() => {});
         }
         
-        let span = btn.querySelector('.btn-text');
-        span.innerHTML = 'Thank You ☺️';
-        btn.style.backgroundColor = '#4CAF50';
-        btn.style.color = 'white';
         setTimeout(() => {
-          span.innerHTML = originalText;
-          btn.style.backgroundColor = '';
-          btn.style.color = '';
-        }, 2000);
+          resetButton();
+        }, 2500);
+        
       } catch (e) {
         btn.classList.remove('loading');
         btn.disabled = false;
         fill.style.width = '0%';
         alert('Unable to save your prayer. Please try again later.');
+        currentLineIndex = -1;
+        showPrayerLine(-1);
       } finally {
         processing = false;
       }
     }
 
+    // ============ INITIALIZATION ============
+    renderPrayerLines();
     fetchCount();
-    if (btn) btn.addEventListener('click', increment);
+    
+    setTimeout(() => {
+      showPrayerLine(-1);
+    }, 100);
+
+    if (btn) {
+      btn.addEventListener('click', increment);
+    }
   </script>
 </body>
 </html>
