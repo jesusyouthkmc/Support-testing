@@ -167,6 +167,10 @@
       opacity: 0;
     }
     
+    .vine-decoration.fade-in {
+      opacity: 0.5;
+    }
+    
     .vine-decoration.hidden {
       opacity: 0;
     }
@@ -351,12 +355,14 @@
     }
 
     function showVine(state) {
-      vine.classList.remove('fade-out', 'hidden');
+      vine.classList.remove('fade-out', 'fade-in', 'hidden');
       
       if (state === 'visible') {
         vine.style.opacity = '0.5';
       } else if (state === 'fade-out') {
         vine.classList.add('fade-out');
+      } else if (state === 'fade-in') {
+        vine.classList.add('fade-in');
       } else if (state === 'hidden') {
         vine.classList.add('hidden');
       }
@@ -419,7 +425,6 @@
         currentLineIndex = 0;
         showPrayerLine(0);
 
-        // Start the API call when line 7 appears (2 lines before Amen)
         let apiCalled = false;
 
         prayerInterval = setInterval(() => {
@@ -428,8 +433,6 @@
           if (currentLineIndex < PRAYER_LINES.length) {
             showPrayerLine(currentLineIndex);
             
-            // When line 6 appears (index 6 out of 8, 0-based), start API call
-            // This gives the API ~4 seconds to complete before Amen finishes
             if (currentLineIndex === 6 && !apiCalled) {
               apiCalled = true;
               apiPromise = callApi();
@@ -498,9 +501,10 @@
       currentLineIndex = -1;
       showPrayerLine(-1);
       
+      // Fade the vine back in after the prayer
       setTimeout(() => {
-        showVine('visible');
-      }, 100);
+        showVine('fade-in');
+      }, 300);
     }
 
     async function increment() {
@@ -521,19 +525,15 @@
         audio.load();
       }
 
-      // Reset apiPromise
       apiPromise = null;
 
-      // Start the prayer animation (API call starts during the prayer)
       await animatePrayer();
 
-      // Now wait for the API call to complete if it hasn't already
       try {
         let data;
         if (apiPromise) {
           data = await apiPromise;
         } else {
-          // Fallback: if API wasn't called during prayer, call it now
           data = await callApi();
         }
         
