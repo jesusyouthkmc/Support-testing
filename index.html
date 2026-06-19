@@ -151,7 +151,7 @@
     .vine-decoration {
       position: absolute;
       opacity: 0.5;
-      transition: opacity 0.7s ease;
+      transition: opacity 0.8s ease;
       pointer-events: none;
       width: 90%;
       max-width: 700px;
@@ -418,29 +418,24 @@
         if (isTransitioning) return resolve();
         isTransitioning = true;
 
+        // Start vine fade out
         showVine('fade-out');
         
+        // After 400ms, start showing the first prayer line WHILE vine is still fading
+        setTimeout(() => {
+          // Start showing the prayer line while vine continues to fade
+          isPraying = true;
+          currentLineIndex = 0;
+          showPrayerLine(0);
+        }, 400);
+        
+        // After 800ms, hide the vine completely
         setTimeout(() => {
           showVine('hidden');
           isTransitioning = false;
           resolve();
-        }, 700);
+        }, 800);
       });
-    }
-
-    // ============ API CALL FUNCTION ============
-    let apiPromise = null;
-
-    async function callApi() {
-      try {
-        await fetch(API, { method: 'POST' });
-        await new Promise(r => setTimeout(r, 300));
-        let res = await fetch(API);
-        let data = await res.json();
-        return data;
-      } catch (e) {
-        throw e;
-      }
     }
 
     function animatePrayer() {
@@ -448,10 +443,6 @@
         if (isPraying) return resolve();
         
         await startPrayerTransition();
-        
-        isPraying = true;
-        currentLineIndex = 0;
-        showPrayerLine(0);
 
         let apiCalled = false;
 
@@ -477,6 +468,21 @@
           }
         }, 2000);
       });
+    }
+
+    // ============ API CALL FUNCTION ============
+    let apiPromise = null;
+
+    async function callApi() {
+      try {
+        await fetch(API, { method: 'POST' });
+        await new Promise(r => setTimeout(r, 300));
+        let res = await fetch(API);
+        let data = await res.json();
+        return data;
+      } catch (e) {
+        throw e;
+      }
     }
 
     // ============ PRAYER COUNTER LOGIC ============
